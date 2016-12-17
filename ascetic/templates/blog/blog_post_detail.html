@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% load mezzanine_tags comment_tags keyword_tags rating_tags i18n disqus_tags %}
+
+{% block meta_title %}{{ blog_post.meta_title }}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for blog_post as tags %}
+{% for tag in tags %}{% if not forloop.first %}, {% endif %}{{ tag }}{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ blog_post.description }}
+{% endmetablock %}{% endblock %}
+
+{% block main %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-push-2">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {% editable blog_post.title %}
+                        <h1>{{ blog_post.title }}</h1>
+                        {% endeditable %}
+                    </div>
+                    <div class="col-xs-6">
+                        <p>{% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}</p>
+                    </div>
+                    <div class="col-xs-6">
+                        {% block blog_post_detail_sharebuttons %}
+                        {% set_short_url_for blog_post %}
+                        <ul class="list-inline">
+                            <li>
+                                <iframe id="twitter-widget-1" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="http://platform.twitter.com/widgets/tweet_button.3748f7cda49448f6c6f7854238570ba0.en.html#dnt=false&amp;id=twitter-widget-1&amp;lang=en&amp;original_referer=http%3A%2F%2Fwww.adhamdannaway.com%2Fblog%2Fweb-hosting%2Fwhats-the-best-web-hosting-for-designers&amp;related=cre8ivecommando&amp;size=m&amp;text=Best%20web%20hosting%20for%20designers&amp;time=1481566101119&amp;type=share&amp;url=http%3A%2F%2Fwww.adhamdannaway.com%2Fblog%2Fweb-hosting%2Fwhats-the-best-web-hosting-for-designers&amp;via=AdhamDannaway" style="position: static; visibility: visible; width: 60px; height: 20px;" data-url="http://www.adhamdannaway.com/blog/web-hosting/whats-the-best-web-hosting-for-designers"></iframe><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+                                <a class="btn btn-sm share-twitter" target="_blank" href="https://twitter.com/intent/tweet?url={{ blog_post.short_url|urlencode }}&amp;text={{ blog_post.title|urlencode }}">{% trans "Share on Twitter" %}</a>
+                            </li>
+                            <li>
+                                <div class="fb-like fb_iframe_widget" data-href="http://www.adhamdannaway.com/blog/web-hosting/whats-the-best-web-hosting-for-designers" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=like&amp;app_id=227683463924663&amp;container_width=0&amp;href=http%3A%2F%2Fwww.adhamdannaway.com%2Fblog%2Fweb-hosting%2Fwhats-the-best-web-hosting-for-designers&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=false"><span style="vertical-align: bottom; width: 85px; height: 20px;"><iframe name="f275e6ea58eb0d8" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/plugins/like.php?action=like&amp;app_id=227683463924663&amp;channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2F_IDqWBiKXtV.js%3Fversion%3D42%23cb%3Df1e3fe35367589%26domain%3Dwww.adhamdannaway.com%26origin%3Dhttp%253A%252F%252Fwww.adhamdannaway.com%252Ff33b08ede9bcf78%26relation%3Dparent.parent&amp;container_width=0&amp;href=http%3A%2F%2Fwww.adhamdannaway.com%2Fblog%2Fweb-hosting%2Fwhats-the-best-web-hosting-for-designers&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;share=false&amp;show_faces=false" style="border: none; visibility: visible; width: 85px; height: 20px;" class=""></iframe></span></div>
+                                <a class="btn btn-sm share-facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">{% trans "Share on Facebook" %}</a>
+                            </li>
+                        </ul>
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% block blog_post_detail_featured_image %}
+                        {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
+                        <img class="img-responsive img-main" src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 600 0 %}">
+                        {% endif %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                    {% block blog_post_detail_content %}
+                    {% editable blog_post.content %}
+                    {{ blog_post.content|richtext_filters|safe }}
+                    {% endeditable %}
+                    {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        <!--{% block blog_post_detail_keywords %}
+                        {% keywords_for blog_post as tags %}
+                        {% if tags %}
+                        {% spaceless %}
+                        <ul class="list-inline tags">
+                            <li>{% trans "Tags" %}:</li>
+                            {% for tag in tags %}
+                            <li><a href="{% url "blog_post_list_tag" tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endspaceless %}
+                        {% endif %}
+                        {% endblock %}
+
+                        {% block blog_post_detail_rating %}
+                        <div class="panel panel-default rating">
+                            <div class="panel-body">
+                            {% rating_for blog_post %}
+                            </div>
+                        </div>
+                        {% endblock %}-->
+                    </div>
+                    <div class="col-xs-12">
+                        {% block blog_post_previous_next %}
+                        <ul class="pager">
+                        {% with blog_post.get_previous_by_publish_date as previous %}
+                        {% if previous %}
+                        <li class="previous">
+                            <a href="{{ previous.get_absolute_url }}">&larr; {{ previous }}</a>
+                        </li>
+                        {% endif %}
+                        {% endwith %}
+                        {% with blog_post.get_next_by_publish_date as next %}
+                        {% if next %}
+                        <li class="next">
+                            <a href="{{ next.get_absolute_url }}">{{ next }} &rarr;</a>
+                        </li>
+                        {% endif %}
+                        {% endwith %}
+                        </ul>
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% block blog_post_detail_related_posts %}
+                        {% if related_posts %}
+                        <h2>{% trans 'Related posts' %}</h2>
+                        <ul class="list-unstyled">
+                            {% for post in related_posts %}
+                            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endblock %}
+                    </div>
+                    {% block blog_post_detail_comments %}
+                    {% if blog_post.allow_comments %}
+                    {% comments_for blog_post %}
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
