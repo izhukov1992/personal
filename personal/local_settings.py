@@ -54,8 +54,3 @@ DATABASES['default'] =  dj_database_url.config()
 #     "SECRET_KEY": SECRET_KEY,
 #     "NEVERCACHE_KEY": NEVERCACHE_KEY,
 # }
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-COMMENTS_DISQUS_SHORTNAME = 'izhukov'
-
