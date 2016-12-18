@@ -344,3 +344,8 @@ COMMENTS_DISQUS_API_SECRET_KEY = 'jH98sbDuYcW1bMMZBbibeqsrMFSA3ak8bT1aALGaPrt7oH
 COMMENTS_DISQUS_SHORTNAME = True
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+REVERSE_PROXY_HTTPS_HEADERS = {
+    ('x-forwarded-protocol', 'https'),
+    ('x-forwarded-ssl', 'on'),
+}
