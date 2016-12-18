@@ -3,6 +3,7 @@ body {
   width: 100%;
   color: #696c74;
   background-color: #fff;
+  font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 a {
   color: #2da9d7;
@@ -11,14 +12,6 @@ a:hover,
 a:focus {
   color: #696c74;
   text-decoration: none;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #212a3e;
 }
 h1 {
   font-size: 3em;
@@ -58,11 +51,67 @@ h6 {
     font-size: 0.5em;
   }
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: #212a3e;
+  font-weight: 300;
+}
+label,
+.control-label,
+.help-block,
+.checkbox,
+.radio {
+    font-size: 12px;
+    font-weight: normal;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    height: 39px;
+    padding: 8px 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #6F6F6F;
+    background-color: #FFF;
+    background-image: none;
+    border: 1px solid #CCC;
+    border-radius: 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.btn {
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    border-radius: 0px;
+    -moz-user-select: none;
+}
 .navbar {
   margin-bottom: 0;
   font-size: 15px;
+  font-weight: 300;
 }
 .navbar-default {
+  border: none;
   background: transparent;
 }
 .navbar-default .navbar-header .navbar-brand {
@@ -78,8 +127,15 @@ h6 {
   margin-top: 10.5px;
   margin-bottom: 10.5px;
 }
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+}
 .navbar-default .navbar-toggle .icon-bar {
   background-color: #696c74;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: transparent;
 }
 .navbar-default .navbar-toggle:hover .icon-bar {
   background-color: #2da9d7;
@@ -165,6 +221,14 @@ header {
 }
 .img-main {
     margin-bottom: 15px;
+}
+.pager li > a,
+.pager li > span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
 }
 footer {
   padding: 10px 0;
