@@ -345,8 +345,3 @@ COMMENTS_DISQUS_SHORTNAME = 'izhukov'
 DEV_SERVER = False
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-REVERSE_PROXY_HTTPS_HEADERS = {
-    ('x-forwarded-protocol', 'https'),
-    ('x-forwarded-ssl', 'on'),
-}
