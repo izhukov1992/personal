@@ -15,12 +15,12 @@ admin.autodiscover()
 # You can also change the ``home`` view to add your own functionality
 # to the project's homepage.
 
-urlpatterns = i18n_patterns(
+urlpatterns = [
     # Change the admin prefix here to use an alternate URL for the
     # admin interface, which would be marginally more secure.
     url("^admin/", include(admin.site.urls)),
     url("^portfolio/", include("portfolio.urls")),
-)
+]
 
 if settings.USE_MODELTRANSLATION:
     urlpatterns += [
