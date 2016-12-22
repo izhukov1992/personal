@@ -29,15 +29,8 @@
                     </div>
                     <div class="col-xs-6 text-right">
                         {% block blog_post_detail_sharebuttons %}
-                        {% set_short_url_for blog_post %}
-                        <ul class="list-inline">
-                            <li>
-                                <a href="https://twitter.com/share" class="twitter-share-button" data-via="IlyaZhukov">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                            </li>
-                            <li>
-                                <iframe src="https://www.facebook.com/plugins/share_button.php?href={{ request.build_absolute_uri }}&layout=button&size=small&mobile_iframe=true&appId=1650951085144176&width=94&height=20" width="94" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                            </li>
-                        </ul>
+                        <div class="addthis_inline_share_toolbox_iyiz"></div>
+                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-585c56a4963644a1"></script>
                         {% endblock %}
                     </div>
                     <div class="col-xs-12">
