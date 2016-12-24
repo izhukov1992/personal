@@ -1,14 +1,19 @@
 from future.builtins import str
 
+from string import punctuation
+
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.encoding import force_text
 
 from mezzanine.conf import settings
 from mezzanine.core.fields import FileField
-from mezzanine.core.models import Displayable, Ownable, RichText, Slugged
+from mezzanine.core.models import Displayable, Ownable, RichText, Slugged, Orderable
 from mezzanine.generic.fields import CommentsField, RatingField
 from mezzanine.utils.models import AdminThumbMixin, upload_to
+
 
 
 class PortfolioPost(Displayable, Ownable, RichText, AdminThumbMixin):
@@ -72,3 +77,37 @@ class PortfolioCategory(Slugged):
     @models.permalink
     def get_absolute_url(self):
         return ("portfolio_post_list_category", (), {"category": self.slug})
+
+
+@python_2_unicode_compatible
+class PortfolioImage(Orderable):
+
+    portfolio_post = models.ForeignKey("PortfolioPost", related_name="images")
+    file = FileField(_("File"), max_length=200, format="Image",
+        upload_to=upload_to("portfolio.PortfolioImage.file", "portfolio"))
+    description = models.CharField(_("Description"), max_length=1000,
+                                                           blank=True)
+
+    class Meta:
+        verbose_name = _("Image")
+        verbose_name_plural = _("Images")
+
+    def __str__(self):
+        return self.description
+
+    def save(self, *args, **kwargs):
+        """
+        If no description is given when created, create one from the
+        file name.
+        """
+        if not self.id and not self.description:
+            name = force_text(self.file)
+            name = name.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+            name = name.replace("'", "")
+            name = "".join([c if c not in punctuation else " " for c in name])
+            # str.title() doesn't deal with unicode very well.
+            # http://bugs.python.org/issue6412
+            name = "".join([s.upper() if i == 0 or name[i - 1] == " " else s
+                            for i, s in enumerate(name)])
+            self.description = name
+        super(PortfolioImage, self).save(*args, **kwargs)

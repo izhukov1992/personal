@@ -3,11 +3,12 @@ from copy import deepcopy
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from portfolio.models import PortfolioPost, PortfolioCategory
+from portfolio.models import PortfolioPost, PortfolioCategory, PortfolioImage
 from mezzanine.conf import settings
 from mezzanine.core.admin import (DisplayableAdmin, OwnableAdmin,
-                                  BaseTranslationModelAdmin)
+                                  BaseTranslationModelAdmin, TabularDynamicInlineAdmin)
 from mezzanine.twitter.admin import TweetableAdminMixin
+from mezzanine.utils.static import static_lazy as static
 
 portfoliopost_fieldsets = deepcopy(DisplayableAdmin.fieldsets)
 portfoliopost_fieldsets[0][1]["fields"].insert(1, "categories")
@@ -20,15 +21,23 @@ portfoliopost_fieldsets = list(portfoliopost_fieldsets)
 portfoliopost_list_filter = deepcopy(DisplayableAdmin.list_filter) + ("categories",)
 
 
+class PortfolioImageInline(TabularDynamicInlineAdmin):
+    model = PortfolioImage
+
+
 class PortfolioPostAdmin(TweetableAdminMixin, DisplayableAdmin, OwnableAdmin):
     """
     Admin class for Portfolio posts.
     """
 
+    class Media:
+        css = {"all": (static("mezzanine/css/admin/gallery.css"),)}
+
     fieldsets = portfoliopost_fieldsets
     list_display = portfoliopost_list_display
     list_filter = portfoliopost_list_filter
     filter_horizontal = ("categories",)
+    inlines = (PortfolioImageInline,)
 
     def save_form(self, request, form, change):
         """
