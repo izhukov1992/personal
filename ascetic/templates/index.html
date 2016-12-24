@@ -32,7 +32,9 @@
             {% for recent_post in recent_posts %}
             <div class="col-xs-12 col-ms-6 col-md-3">
                 <a class="item" href="{{ recent_post.get_absolute_url }}" title="{{ recent_post.title }}">
+                    {% if recent_post.featured_image %}
                     <img class="img-responsive" src="{{ MEDIA_URL }}{% thumbnail recent_post.featured_image 435 255 %}">
+                    {% endif %}
                     <div>
                         <h4>{{ recent_post.title }}</h4>
                         <p>{{ recent_post.description|safe }}</p>
@@ -57,7 +59,9 @@
             {% for recent_post in recent_posts %}
             <div class="col-xs-12 col-ms-6 col-md-3">
                 <a class="item" href="{{ recent_post.get_absolute_url }}" title="{{ recent_post.title }}">
+                    {% if recent_post.featured_image %}
                     <img class="img-responsive" src="{{ MEDIA_URL }}{% thumbnail recent_post.featured_image 435 255 %}">
+                    {% endif %}
                     <div>
                         <h4>{{ recent_post.title }}</h4>
                         <p>{{ recent_post.description|safe }}</p>
