@@ -1,4 +1,4 @@
-{% extends "portfolio/portfolio_post_list.html" %}
+{% extends "base.html" %}
 
 {% load mezzanine_tags comment_tags keyword_tags rating_tags i18n disqus_tags %}
 
@@ -13,122 +13,112 @@
 {{ portfolio_post.description }}
 {% endmetablock %}{% endblock %}
 
-{% block title %}
-{% editable portfolio_post.title %}{{ portfolio_post.title }}{% endeditable %}
-{% endblock %}
-
-{% block breadcrumb_menu %}
-{{ block.super }}
-<li class="active">{{ portfolio_post.title }}</li>
-{% endblock %}
-
 {% block main %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-push-2">
+                <div class="row">
+                    <div class="col-xs-12">
+                        {% editable portfolio_post.title %}
+                        <h1>{{ portfolio_post.title }}</h1>
+                        {% endeditable %}
+                    </div>
+                    <div class="col-xs-6">
+                        <p>{% blocktrans with sometime=portfolio_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}</p>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        {% block portfolio_post_detail_sharebuttons %}
+                        <div class="addthis_inline_share_toolbox_iyiz"></div>
+                        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-585c56a4963644a1"></script>
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% block portfolio_post_detail_images %}
+                        {% if portfolio_post.images %}
+                        {% for image in portfolio_post.images.all %}
+                        <img class="img-responsive img-main" src="{{ MEDIA_URL }}{{ image.file }}">
+                        {% endfor %}
+                        {% endif %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% block portfolio_post_detail_featured_image %}
+                        {% if settings.BLOG_USE_FEATURED_IMAGE and portfolio_post.featured_image %}
+                        <img class="img-responsive img-main" src="{{ MEDIA_URL }}{% thumbnail portfolio_post.featured_image 600 0 %}">
+                        {% endif %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                    {% block portfolio_post_detail_content %}
+                    {% editable portfolio_post.content %}
+                    {{ portfolio_post.content|richtext_filters|safe }}
+                    {% endeditable %}
+                    {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        <!--{% block portfolio_post_detail_keywords %}
+                        {% keywords_for portfolio_post as tags %}
+                        {% if tags %}
+                        {% spaceless %}
+                        <ul class="list-inline tags">
+                            <li>{% trans "Tags" %}:</li>
+                            {% for tag in tags %}
+                            <li><a href="{% url "portfolio_post_list_tag" tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endspaceless %}
+                        {% endif %}
+                        {% endblock %}
 
-{% block portfolio_post_detail_postedby %}
-{% editable portfolio_post.publish_date %}
-<h6 class="post-meta">
-    {% trans "Posted by" %}:
-    {% with portfolio_post.user as author %}
-    <a href="{% url "portfolio_post_list_author" author %}">{{ author.get_full_name|default:author.username }}</a>
-    {% endwith %}
-    {% blocktrans with sometime=portfolio_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}
-</h6>
-{% endeditable %}
-{% endblock %}
-{% block portfolio_post_detail_commentlink %}
-<p>
-    {% if portfolio_post.allow_comments %}
-        {% if settings.COMMENTS_DISQUS_SHORTNAME %}
-            (<a href="{{ portfolio_post.get_absolute_url }}#disqus_thread"
-                data-disqus-identifier="{% disqus_id_for portfolio_post %}">{% spaceless %}
-                {% trans "Comments" %}
-            {% endspaceless %}</a>)
-        {% else %}(<a href="#comments">{% spaceless %}
-            {% blocktrans count comments_count=portfolio_post.comments_count %}{{ comments_count }} comment{% plural %}{{ comments_count }} comments{% endblocktrans %}
-            {% endspaceless %}</a>)
-        {% endif %}
-    {% endif %}
-</p>
-{% endblock %}
-
-{% block portfolio_post_detail_featured_image %}
-{% if settings.BLOG_USE_FEATURED_IMAGE and portfolio_post.featured_image %}
-<p><img class="img-responsive" src="{{ MEDIA_URL }}{% thumbnail portfolio_post.featured_image 600 0 %}"></p>
-{% endif %}
-{% endblock %}
-
-{% if settings.COMMENTS_DISQUS_SHORTNAME %}
-{% include "generic/includes/disqus_counts.html" %}
-{% endif %}
-
-{% block portfolio_post_detail_content %}
-{% editable portfolio_post.content %}
-{{ portfolio_post.content|richtext_filters|safe }}
-{% endeditable %}
-{% endblock %}
-
-{% block portfolio_post_detail_keywords %}
-{% keywords_for portfolio_post as tags %}
-{% if tags %}
-{% spaceless %}
-<ul class="list-inline tags">
-    <li>{% trans "Tags" %}:</li>
-    {% for tag in tags %}
-    <li><a href="{% url "portfolio_post_list_tag" tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
-    {% endfor %}
-</ul>
-{% endspaceless %}
-{% endif %}
-{% endblock %}
-
-{% block portfolio_post_detail_rating %}
-<div class="panel panel-default rating">
-    <div class="panel-body">
-    {% rating_for portfolio_post %}
+                        {% block portfolio_post_detail_rating %}
+                        <div class="panel panel-default rating">
+                            <div class="panel-body">
+                            {% rating_for portfolio_post %}
+                            </div>
+                        </div>
+                        {% endblock %}-->
+                    </div>
+                    <div class="col-xs-12">
+                        {% block portfolio_post_previous_next %}
+                        <ul class="pager">
+                        {% with portfolio_post.get_previous_by_publish_date as previous %}
+                        {% if previous %}
+                        <li class="previous">
+                            <a href="{{ previous.get_absolute_url }}">&larr; {{ previous }}</a>
+                        </li>
+                        {% endif %}
+                        {% endwith %}
+                        {% with portfolio_post.get_next_by_publish_date as next %}
+                        {% if next %}
+                        <li class="next">
+                            <a href="{{ next.get_absolute_url }}">{{ next }} &rarr;</a>
+                        </li>
+                        {% endif %}
+                        {% endwith %}
+                        </ul>
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-12">
+                        {% block portfolio_post_detail_related_posts %}
+                        {% if related_posts %}
+                        <h2>{% trans 'Related posts' %}</h2>
+                        <ul class="list-unstyled">
+                            {% for post in related_posts %}
+                            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endblock %}
+                    </div>
+                    {% block portfolio_post_detail_comments %}
+                    {% if portfolio_post.allow_comments %}
+                    {% comments_for portfolio_post %}
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
-
-{% block portfolio_post_detail_sharebuttons %}
-{% set_short_url_for portfolio_post %}
-<a class="btn btn-sm share-twitter" target="_blank" href="https://twitter.com/intent/tweet?url={{ portfolio_post.short_url|urlencode }}&amp;text={{ portfolio_post.title|urlencode }}">{% trans "Share on Twitter" %}</a>
-<a class="btn btn-sm share-facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">{% trans "Share on Facebook" %}</a>
-{% endblock %}
-
-{% block portfolio_post_previous_next %}
-<ul class="pager">
-{% with portfolio_post.get_previous_by_publish_date as previous %}
-{% if previous %}
-<li class="previous">
-    <a href="{{ previous.get_absolute_url }}">&larr; {{ previous }}</a>
-</li>
-{% endif %}
-{% endwith %}
-{% with portfolio_post.get_next_by_publish_date as next %}
-{% if next %}
-<li class="next">
-    <a href="{{ next.get_absolute_url }}">{{ next }} &rarr;</a>
-</li>
-{% endif %}
-{% endwith %}
-</ul>
-{% endblock %}
-
-{% block portfolio_post_detail_related_posts %}
-{% if related_posts %}
-<div id="related-posts">
-<h3>{% trans 'Related posts' %}</h3>
-<ul class="list-unstyled">
-{% for post in related_posts %}
-     <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-{% endfor %}
-</ul>
-</div>
-{% endif %}
-{% endblock %}
-
-{% block portfolio_post_detail_comments %}
-{% if portfolio_post.allow_comments %}{% comments_for portfolio_post %}{% endif %}
-{% endblock %}
-
+</section>
 {% endblock %}
