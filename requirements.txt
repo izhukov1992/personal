@@ -1,6 +1,5 @@
 Mezzanine==4.2.2
 django-modeltranslation==0.12
 django-storages==1.5.1
-dropbox==7.1.1
 psycopg2==2.6.1
 dj-database-url==0.4.1
