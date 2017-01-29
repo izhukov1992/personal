@@ -5,8 +5,6 @@
 # have to be manually restarted because changes will not be noticed
 # immediately.
 
-import dj_database_url
-
 DEBUG = True
 
 # Make these unique, and don't share it with anybody.
@@ -29,8 +27,6 @@ DATABASES = {
         "PORT": "",
     }
 }
-
-DATABASES['default'] =  dj_database_url.config()
 
 ###################
 # DEPLOY SETTINGS #
