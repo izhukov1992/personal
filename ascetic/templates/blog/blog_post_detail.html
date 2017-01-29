@@ -27,30 +27,56 @@
                     <div class="col-xs-6">
                         <p>{% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}</p>
                     </div>
+                    
+                    {% block blog_post_detail_sharebuttons %}
                     <div class="col-xs-6 text-right">
-                        {% block blog_post_detail_sharebuttons %}
                         <div class="addthis_inline_share_toolbox_iyiz"></div>
                         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-585c56a4963644a1"></script>
-                        {% endblock %}
                     </div>
-                    <div class="col-xs-12">
-                        {% block blog_post_detail_featured_image %}
-                        {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
-                        <img class="img-responsive img-main" src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 600 0 %}">
-                        {% endif %}
-                        {% endblock %}
-                    </div>
-                    <div class="col-xs-12">
-                    {% block blog_post_detail_content %}
-                    {% editable blog_post.content %}
-                    {{ blog_post.content|richtext_filters|safe }}
-                    {% endeditable %}
                     {% endblock %}
-                    </div>
+                    
+                    {% block blog_post_detail_featured_image %}
+                    {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
                     <div class="col-xs-12">
-                        <!--{% block blog_post_detail_keywords %}
-                        {% keywords_for blog_post as tags %}
-                        {% if tags %}
+                        <img class="img-responsive img-main" src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 600 0 %}">
+                    </div>
+                    {% endif %}
+                    {% endblock %}
+                    
+                    {% block blog_post_detail_content %}
+                    <div class="col-xs-12">
+                        {% editable blog_post.content %}
+                        {{ blog_post.content|richtext_filters|safe }}
+                        {% endeditable %}
+                    </div>
+                    {% endblock %}
+                    
+                    {% block blog_post_detail_author %}
+                    <div class="col-xs-12">
+                        {% trans "Posted by" %}:
+                        {% with blog_post.user as author %}
+                        <a href="{% url "blog_post_list_author" author %}">{{ author.get_full_name|default:author.username }}</a>
+                        {% endwith %}
+                    </div>
+                    {% endblock %}
+                    
+                    {% block blog_post_detail_categories %}
+                    {% with blog_post.categories.all as categories %}
+                    {% if categories %}
+                    <div class="col-xs-12">
+                        {% trans "Categories" %}
+                        {% for category in categories %}
+                        <a href="{% url "blog_post_list_category" category.slug %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    {% endblock %}
+                    
+                    {% block blog_post_detail_keywords %}
+                    {% keywords_for blog_post as tags %}
+                    {% if tags %}
+                    <div class="col-xs-12">
                         {% spaceless %}
                         <ul class="list-inline tags">
                             <li>{% trans "Tags" %}:</li>
@@ -59,19 +85,22 @@
                             {% endfor %}
                         </ul>
                         {% endspaceless %}
-                        {% endif %}
-                        {% endblock %}
-
-                        {% block blog_post_detail_rating %}
+                    </div>
+                    {% endif %}
+                    {% endblock %}
+                    
+                    <!--{% block blog_post_detail_rating %}
+                    <div class="col-xs-12">
                         <div class="panel panel-default rating">
                             <div class="panel-body">
                             {% rating_for blog_post %}
                             </div>
                         </div>
-                        {% endblock %}-->
                     </div>
+                    {% endblock %}-->
+                    
+                    {% block blog_post_detail_previous_next %}
                     <div class="col-xs-12">
-                        {% block blog_post_previous_next %}
                         <ul class="pager">
                         {% with blog_post.get_previous_by_publish_date as previous %}
                         {% if previous %}
@@ -88,10 +117,11 @@
                         {% endif %}
                         {% endwith %}
                         </ul>
-                        {% endblock %}
                     </div>
+                    {% endblock %}
+                    
+                    {% block blog_post_detail_related_posts %}
                     <div class="col-xs-12">
-                        {% block blog_post_detail_related_posts %}
                         {% if related_posts %}
                         <h2>{% trans 'Related posts' %}</h2>
                         <ul class="list-unstyled">
@@ -100,8 +130,9 @@
                             {% endfor %}
                         </ul>
                         {% endif %}
-                        {% endblock %}
                     </div>
+                    {% endblock %}
+                    
                     {% block blog_post_detail_comments %}
                     {% if blog_post.allow_comments %}
                     {% comments_for blog_post %}
