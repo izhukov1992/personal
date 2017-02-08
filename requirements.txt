@@ -4,4 +4,4 @@ django-storages==1.5.1
 boto==2.45.0
 psycopg2==2.6.1
 dj-database-url==0.4.1
-mezzaninie-theme-ascetic==0.1
+mezzanine-theme-ascetic==0.1
