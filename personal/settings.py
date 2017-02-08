@@ -253,7 +253,6 @@ INSTALLED_APPS = (
     # "mezzanine.mobile",
     # "custompage",
     "portfolio",
-    "storages",
 )
 
 # List of middleware classes to use. Order is important; in the request phase,

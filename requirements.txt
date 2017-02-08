@@ -1,5 +1,3 @@
 Mezzanine==4.2.2
 django-modeltranslation==0.12
-django-storages==1.5.1
-boto==2.45.0
 mezzanine-theme-ascetic==0.1
