@@ -1,7 +1,11 @@
 Mezzanine==4.2.2
 django-modeltranslation==0.12
+<<<<<<< HEAD
 django-storages==1.5.1
 boto==2.45.0
 psycopg2==2.6.1
 dj-database-url==0.4.1
+=======
+mezzanine-portfolio==0.1
+>>>>>>> 9c4b5d1... Register portfolio app in PyPI and exclude it from project
 mezzanine-theme-ascetic==0.1
